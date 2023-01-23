@@ -1,0 +1,18 @@
+version: '3.2'
+services:
+  mariadb:
+    image: mariadb:10.10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: twitter_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+    restart: on-failure
+    volumes:
+      - ${PWD}/mariadb:/var/lib/mysql
