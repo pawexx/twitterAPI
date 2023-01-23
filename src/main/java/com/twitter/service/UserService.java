@@ -65,10 +65,7 @@ public class UserService {
     }
 
     private TwitterUserEntity mapTwitterUserToEntity(UserData.User user) {
-        TwitterUserEntity entity = new TwitterUserEntity();
-        entity.setId(user.getId());
-        entity.setName(user.getUserName());
-        return entity;
+        return new TwitterUserEntity(user.getId(), user.getUserName());
     }
 
 }

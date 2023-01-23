@@ -7,7 +7,6 @@ import jakarta.persistence.OneToMany;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
 import java.util.List;
@@ -15,9 +14,12 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Getter
-@Setter
 @EqualsAndHashCode
 public class TwitterUserEntity {
+    public TwitterUserEntity(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
     @Id
     private Long id;
     private String name;

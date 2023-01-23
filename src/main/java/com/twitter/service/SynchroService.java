@@ -34,7 +34,6 @@ public class SynchroService {
     private final TweetRepository tweetRepository;
     private final RestTemplate restTemplate;
     private final UserService userService;
-
     //The dateTime for first time use, when no tweets in database will be found
     private final String dateTimeFrom = "2023-01-01T00:00:00Z";
     private final List<String> validUserNames;
@@ -53,7 +52,7 @@ public class SynchroService {
         this.userService = userService;
     }
 
-    @Scheduled(fixedDelay = 5*60*1000)
+    @Scheduled(fixedDelay =1*60*1000)
     public void synchronizeNewTweets() {
         for (String userName : validUserNames) {
             TwitterUserEntity user = userService.getTwitterUserData(userName);
@@ -95,17 +94,16 @@ public class SynchroService {
     }
 
     private String formatDateForTwitter(LocalDateTime date) {
-        String formattedDate = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date);
-        return formattedDate += "Z";
+        return new StringBuilder(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(date)).append("Z").toString();
     }
 
     private TweetEntity mapTweetDataToEntity(TweetData.Tweet tweet, TwitterUserEntity twitterUserEntity) {
-        TweetEntity entity = new TweetEntity();
-        entity.setId(tweet.getId());
-        entity.setText(tweet.getText());
-        entity.setCreatedAt(tweet.getCreatedAt());
-        entity.setTwitterUser(twitterUserEntity);
-        return entity;
+        return TweetEntity.builder()
+                .id(tweet.getId())
+                .text(tweet.getText())
+                .createdAt(tweet.getCreatedAt())
+                .twitterUser(twitterUserEntity)
+                .build();
     }
 
     private TweetData mapDataFromJson(String json) {
